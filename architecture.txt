@@ -1,0 +1,23 @@
+Google Earth Engine (AlphaEarth) 
+    ↓ (Export embeddings as GeoPackage/Parquet)
+Python Data Pipeline 
+    ↓ (Convert embeddings to generation rules)
+Mapgen4 / MetroMap.io Engine 
+    ↓ (Procedural generation guided by real data)
+Three.js Visualization
+
+
+your-city-project/
+├── data-pipeline/
+│   ├── extract_embeddings.py    # Step 1: Get AlphaEarth data
+│   ├── analyze_clusters.py      # Step 2: Find urban patterns
+│   └── export_generation_rules.py # Export as JSON for web app
+├── web-app/
+│   ├── src/
+│   │   ├── generators/
+│   │   │   ├── Mapgen4Adapter.js    # Mapgen4 integration
+│   │   │   └── MetroMapAdapter.js   # MetroMap.io integration
+│   │   ├── data/
+│   │   │   └── city_rules.json      # Your extracted patterns
+│   │   └── App.js                   # Main Three.js scene
+└── package.json
