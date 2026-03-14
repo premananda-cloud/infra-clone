@@ -3,6 +3,11 @@ import geopandas as gpd
 import pandas as pd
 import numpy as np
 
+#Authorise earth engine
+import ee
+ee.Authenticate()
+ee.Initialize(project='my-project')
+
 # Initialize Earth Engine
 ee.Initialize()
 
