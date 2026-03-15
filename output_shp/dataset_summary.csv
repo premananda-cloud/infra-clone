@@ -1,0 +1,4 @@
+File,Geometry_Type,Feature_Count
+buildings_parks.shp,Polygon,26
+roads.shp,Line,4
+trees.shp,Point,8
