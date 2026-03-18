@@ -1,0 +1,44 @@
+{
+  "crs": "EPSG:25833",
+  "crs_name": "ETRS89 / UTM zone 33N",
+  "pixel_resolution_m": 1.0,
+  "import_order": [
+    "1. GIS > Set scene CRS \u2192 EPSG:25833",
+    "2. Import berlin_landuse.shp     (Polygon, flat ground)",
+    "3. Import berlin_water.shp       (Polygon, flat)",
+    "4. Import berlin_parcels.shp     (Polygon, flat outlines)",
+    "5. Import berlin_roads.shp       (Line)",
+    "6. Import berlin_buildings.shp   (Polygon, Extrude field: height_m)"
+  ],
+  "tif_usage": {
+    "berlin_building_height.tif": "Use as displacement texture OR import as terrain mesh for LOD1 city model",
+    "berlin_building_mask.tif": "Binary mask for footprint-based material selection",
+    "berlin_roads_mask.tif": "Road presence for procedural road texturing",
+    "berlin_water_mask.tif": "Water mask for shader blend node",
+    "berlin_landuse_class.tif": "Integer class raster (0-8) \u2192 ColorRamp \u2192 material",
+    "berlin_ground_mask.tif": "All-features mask for ground plane trimming"
+  },
+  "blender_tips": [
+    "Building height_m field \u2192 use as Extrude value in BlenderGIS import dialog",
+    "mat_id field (int) \u2192 Attribute node \u2192 Color Ramp \u2192 assign materials by index",
+    "For realistic scale: 1 Blender unit = 1 metre (BlenderGIS sets this automatically with EPSG:25833)",
+    "berlin_building_height.tif can be used as a Displacement modifier on a grid mesh",
+    "Combine building_height.tif + building_mask.tif in a MixShader for rooftop vs wall"
+  ],
+  "files": {
+    "shp": [
+      "berlin_buildings.shp",
+      "berlin_landuse.shp",
+      "berlin_roads.shp",
+      "berlin_water.shp"
+    ],
+    "tif": [
+      "berlin_building_height.tif",
+      "berlin_building_mask.tif",
+      "berlin_ground_mask.tif",
+      "berlin_landuse_class.tif",
+      "berlin_roads_mask.tif",
+      "berlin_water_mask.tif"
+    ]
+  }
+}
