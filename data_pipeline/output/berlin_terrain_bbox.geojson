@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "berlin_terrain_bbox",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::25833" } },
+"features": [
+{ "type": "Feature", "properties": { "area": "query_bbox", "crs": "EPSG:25833" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 392760.427632228063885, 5818381.452758684754372 ], [ 392833.463938508997671, 5821718.105444650165737 ], [ 388764.131598225212656, 5821808.889832895249128 ], [ 388688.320847249007784, 5818472.262577582150698 ], [ 392760.427632228063885, 5818381.452758684754372 ] ] ] } }
+]
+}

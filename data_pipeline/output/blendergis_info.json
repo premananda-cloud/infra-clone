@@ -1,0 +1,13 @@
+{
+  "centroid_x": 390761.57807403203,
+  "centroid_y": 5820094.988281213,
+  "crs": "EPSG:25833",
+  "epsg": 25833,
+  "bbox_wgs84": [
+    13.36,
+    52.505,
+    13.42,
+    52.535
+  ],
+  "blendergis_tip": "In BlenderGIS: Set Scene CRS to EPSG:25833, then Import > GIS File for each .gpkg layer. Use 'berlin_terrain_bbox.geojson' to define your DEM extent."
+}
