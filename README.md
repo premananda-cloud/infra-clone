@@ -1,28 +1,69 @@
 # Berlin Open Data → BlenderGIS Pipeline
 
 Fetch Berlin's open geodata with pure Python and import it into Blender via BlenderGIS — no QGIS needed.
+Works on Windows, macOS, and Linux — the default path (`--source osm`) is pure Python with no
+external binaries required.
 
 ---
 
 ## Install
 
 ```bash
-pip install requests geopandas shapely pyproj fiona osmnx tqdm
+pip install -r requirements.txt
 ```
+
+That's the full dependency list — it's a pinned, tested set (`pip freeze` output), so versions
+won't drift underneath you.
 
 ---
 
 ## Quick Start
 
 ```bash
-# Fetch Mitte district (OSM, fastest)
+cd src
+
+# 1. Fetch Mitte district (OSM via Overpass — fastest, works on any OS)
 python berlin_gis_pipeline.py --area mitte --source osm
 
-# Clean + optimize for Blender
+# 2. Clean + optimize for Blender (merges layers, fixes geometry, adds mat_id)
 python berlin_postprocess.py
 
-# → Import *_clean.gpkg files into BlenderGIS
+# → output/*_clean.gpkg is ready to import into BlenderGIS (see "BlenderGIS Import Steps" below)
 ```
+
+That's the whole pipeline for the standard path. Everything below is optional depending on how
+you want to get the data into Blender, or if you want offline/official-cadaster sources.
+
+---
+
+## Two Ways to Get This Into Blender
+
+**Path A — Direct `.gpkg` import (simplest, fewest steps)**
+Import the `*_clean.gpkg` files straight into Blender with the BlenderGIS addon. See
+[BlenderGIS Import Steps](#blendergis-import-steps) below.
+
+**Path B — Shapefile + GeoTIFF (if BlenderGIS's native GPKG import gives you trouble, or you want
+raster masks for shading/displacement)**
+
+```bash
+python berlin_to_blender.py --input ./output --res 1.0
+```
+
+This reads the `*_clean.gpkg` files and produces:
+
+```
+output/shp/   berlin_buildings.shp, berlin_roads.shp, berlin_water.shp, berlin_landuse.shp, berlin_parcels.shp
+output/tif/   berlin_building_height.tif   ← height_m burned to raster (usable as displacement)
+              berlin_building_mask.tif     ← binary building footprint mask
+              berlin_roads_mask.tif        ← road presence mask
+              berlin_water_mask.tif        ← water mask
+              berlin_landuse_class.tif     ← mat_id class raster (0–8) for a Color Ramp shader
+              berlin_ground_mask.tif       ← combined footprint mask (all features)
+output/blendergis_import_guide.json        ← machine-readable import order + tips (mirrors this README)
+```
+
+Import the `.shp` files the same way as the `.gpkg` files (same import order, same
+`height_m`/`mat_id` fields). Use the `.tif` rasters as texture inputs in the Shader Editor.
 
 ---
 
@@ -53,17 +94,21 @@ Custom bbox: `--area "13.38,52.50,13.42,52.53"` (minLon,minLat,maxLon,maxLat)
 
 ---
 
-## Geofabrik PBF Method (full city / offline)
+## Geofabrik PBF Method (full city / offline / optional)
 
-For the full city or when Overpass is slow:
+This path is only needed for the full city or when Overpass is slow — the default
+`--source osm` path above already works everywhere without it. It requires `osmium-tool`,
+a native binary:
 
 ```bash
 # 1. Download the Berlin extract (~70MB)
+#    Windows: download the .pbf directly from the URL below instead of using wget
 wget https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf
 
 # 2. Install osmium-tool
-sudo apt install osmium-tool    # Ubuntu/Debian
-brew install osmium-tool        # macOS
+sudo apt install osmium-tool              # Ubuntu/Debian
+brew install osmium-tool                  # macOS
+conda install -c conda-forge osmium-tool  # Windows (no official native .exe — conda-forge or WSL is the reliable route)
 
 # 3. Extract your area from the PBF
 python berlin_pbf_extractor.py --pbf berlin-latest.osm.pbf --area mitte

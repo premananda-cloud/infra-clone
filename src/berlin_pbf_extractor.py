@@ -17,6 +17,7 @@ Requires: osmium (osmium-tool) + geopandas
 import subprocess, json, tempfile, os, sys, argparse, logging
 from pathlib import Path
 import geopandas as gpd
+import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -49,7 +50,15 @@ def check_osmium():
         log.info(f"osmium version: {result.stdout.strip()}")
         return True
     except FileNotFoundError:
-        log.error("osmium-tool not found. Install with: sudo apt install osmium-tool")
+        log.error(
+            "osmium-tool not found. This script is optional — "
+            "berlin_gis_pipeline.py --source osm works without it on any OS.\n"
+            "  To install osmium-tool:\n"
+            "    Linux   : sudo apt install osmium-tool\n"
+            "    macOS   : brew install osmium-tool\n"
+            "    Windows : conda install -c conda-forge osmium-tool  "
+            "(no official native .exe; conda-forge or WSL is the reliable route)"
+        )
         return False
 
 
@@ -131,7 +140,6 @@ def process_buildings_geojson(geojson_path):
                     pass
         return 9.0
 
-    import pandas as pd
     gdf["height_m"] = gdf.apply(parse_height, axis=1)
     gdf["building_type"] = gdf.get("building", "yes")
     return gdf
@@ -151,7 +159,6 @@ def run_pbf_pipeline(pbf_path, area="mitte"):
     log.info(f"Clipped PBF: {clipped_pbf}")
 
     # Step 2: Extract each layer
-    import pandas as pd
     for layer_name, filter_expr in LAYER_FILTERS.items():
         log.info(f"Processing layer: {layer_name}")
         geojson_out = OUTPUT_DIR / f"berlin_{layer_name}_raw.geojson"

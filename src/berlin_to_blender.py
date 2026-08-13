@@ -28,7 +28,7 @@ Options:
   --no-shp  Skip shapefile outputs
 
 Requirements:
-  pip install geopandas rasterio fiona shapely pyproj
+  pip install -r requirements.txt
 """
 
 import argparse, logging, warnings

@@ -16,7 +16,7 @@ Outputs to ./output/:
   berlin_terrain_bbox.geojson← Bounding box for DEM alignment
 
 Usage:
-  pip install requests geopandas shapely pyproj fiona osmnx tqdm
+  pip install -r requirements.txt
   python berlin_gis_pipeline.py [--area mitte] [--source osm|alkis|all]
 """
 
